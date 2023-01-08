@@ -4,9 +4,30 @@ using UnityEngine;
 
 public class Move : MonoBehaviour
 {
+
+    [SerializeField] private float lifeTime; 
+    
+    // local vars
+    private float timeLeft;
+    
     void Start()
     {
-        Destroy(gameObject, 7.5f);
+        timeLeft = lifeTime;
+    }
+
+    void Update()
+    {
+        if (timeLeft <= 0)
+        {
+            if (GameManager.state == State.playing)
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            timeLeft -= Time.deltaTime;
+        }
     }
 
     void FixedUpdate()

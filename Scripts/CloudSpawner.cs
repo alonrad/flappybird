@@ -27,7 +27,10 @@ public class CloudSpawner : MonoBehaviour
 
     void Spawn()
     {
-        GameObject pipe = Instantiate(clouds[Random.Range(0, clouds.Length)], new Vector3(20, Random.Range(minSpawnHeight, maxSpawnHeight), 0), Quaternion.Euler(new Vector3(0, 0, Random.Range(minRotation, maxRotation))));
+        if (GameManager.state == State.playing || GameManager.state == State.waiting)
+        {
+            GameObject pipe = Instantiate(clouds[Random.Range(0, clouds.Length)], new Vector3(20, Random.Range(minSpawnHeight, maxSpawnHeight), 0), Quaternion.Euler(new Vector3(0, 0, Random.Range(minRotation, maxRotation))));
+        }
         Invoke("Spawn", Random.Range(minSpawnRate, maxSpawnRate));
     }
 }

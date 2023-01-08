@@ -13,7 +13,6 @@ public class MoveCloud : MonoBehaviour
 
     void Start()
     {
-        Destroy(gameObject, 10f);
         CurrentSpeed = Random.Range(minSpeed, maxSpeed);
     }
 

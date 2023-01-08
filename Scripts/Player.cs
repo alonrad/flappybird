@@ -12,15 +12,12 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationIntensity;
     public static float playerSpeed;
-    public static int CurrentScore;
-    public static int HighScore;
 
     [Space]
 
     [Header("References")]
     private PlayerInput input;
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private Collider2D col;
 
     [Space]
@@ -33,7 +30,6 @@ public class Player : MonoBehaviour
     void Awake()
     {
         playerSpeed = moveSpeed;
-        CurrentScore = 0;
 
         input = new PlayerInput();
         input.Enable();
@@ -44,10 +40,7 @@ public class Player : MonoBehaviour
         if (input.Player.Jump.triggered)
         {
             Jump();
-        }
-
-        if (scoreText) {
-            scoreText.text = CurrentScore.ToString();
+            if (GameManager.state == State.waiting) GameManager.state = State.playing;
         }
 
         transform.rotation = Quaternion.Euler(0, 0, rb.velocity.y * rotationIntensity);
@@ -73,26 +66,26 @@ public class Player : MonoBehaviour
         {
             Score();
         }
+        else if (other.gameObject.transform.root.gameObject.CompareTag("JumpPad"))
+        {
+            Jump();
+        }
     }
 
     void Score()
     {
-        CurrentScore++;
+        ScoreManager.Score();
         pointSource.Play();
-    }
-
-    void ReloadScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void Lose()
     {
         die.Play();
-        Invoke(nameof(ReloadScene), 1.25f);
         rb.velocity = new Vector2(2.5f, 7.5f);
         rb.angularVelocity = -500f;
         playerSpeed = 0;
+        GameManager.state = State.dead;
+        Destroy(gameObject, 2.5f);
         col.enabled = false;
         enabled = false;
     }

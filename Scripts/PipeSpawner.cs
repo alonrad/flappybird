@@ -21,6 +21,9 @@ public class PipeSpawner : MonoBehaviour
 
     void Spawn()
     {
-        GameObject pipe = Instantiate(pipes, new Vector3(20, Random.Range(-3f, 5f), 0), Quaternion.identity);
+        if (GameManager.state == State.playing)
+        {
+            GameObject pipe = Instantiate(pipes, new Vector3(20, Random.Range(-3f, 5f), 0), Quaternion.identity);
+        }
     }
 }
